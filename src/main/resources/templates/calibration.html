@@ -1,0 +1,53 @@
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kalibracja</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.4.0/css/bootstrap.min.css"/>
+    <script src="/webjars/jquery/3.6.2/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${procedureName}">Procedura</h1>
+    <p><span th:text="${step.message}">Wiadomość kroku</span></p>
+    <div th:if="${isInputStep}">
+        <p>
+            <span>Pomiar: </span><span th:text="${measurmentName}">nazwa</span>
+            <span>, symbol: </span><span th:text="${measurmentSymbol}">symbol</span>
+        </p>
+        <p>
+            <span>Parametry: </span><span th:text="${parameters}">parametry</span>
+        </p>
+    </div>
+    <form action="#" th:action="@{/home/calibration-service/{id}/{number}(id=${calibrationId}, number=${stepNumber})}" th:object="${stepFill}" method="post">
+        <div th:if="${isInputStep}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Wartość referencyjna</th>
+                    <th>Wartość urządzenia kalibrowanego</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="stepfillRow, itemStat : *{stepFillRows}">
+                    <td th:if="${referenceValuesFromControlPoint}">
+                        <input th:value="${referenceValue}" type="text" disabled/>
+                    </td>
+                    <td th:unless="${referenceValuesFromControlPoint}">
+                        <input type="text" th:field="*{stepFillRows[__${itemStat.index}__].instrumentValue}" />
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{stepFillRows[__${itemStat.index}__].deviceValue}" />
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p>
+            <input th:if="${isLastStep}" type="submit" value="Zakończ"/>
+            <input th:unless="${isLastStep}" type="submit" value="Dalej"/>
+        </p>
+    </form>
+</div>
+</body>
+</html>
