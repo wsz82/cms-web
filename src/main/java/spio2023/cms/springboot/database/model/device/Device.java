@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 
 @Entity
@@ -23,7 +22,7 @@ public class Device {
     @EqualsAndHashCode.Exclude
     @Id
     @GeneratedValue
-    private Long id;
+    private Long deviceId;
 
     @NotNull
     @Column(nullable = false, unique = true)

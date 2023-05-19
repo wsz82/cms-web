@@ -24,5 +24,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - uses: s4u/maven-settings-action@v2.8.0
+      with:
+        servers: '[{"id": "github-cms", "username": "wsz82", "password": "${{ secrets.CMS_READ }}"}]'
     - name: Build with Maven
       run: mvn -B package --file pom.xml

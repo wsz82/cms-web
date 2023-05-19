@@ -7,7 +7,7 @@
 	<server>
       <id>github-cms</id>
       <username>wsz82</username>
-      <password>${env.CMS_TOKEN}</password>
+      <password>${env.CMS_READ}</password>
     </server>
   </servers>
 </settings>

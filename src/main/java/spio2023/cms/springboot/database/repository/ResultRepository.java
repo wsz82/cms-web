@@ -1,10 +1,17 @@
 package spio2023.cms.springboot.database.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RestResource;
+import spio2023.cms.springboot.database.model.calibration.Input;
 import spio2023.cms.springboot.database.model.calibration.Result;
 
+import java.util.List;
+
 public interface ResultRepository extends JpaRepository<Result, Long> {
+
+    Page<Result> findAllByCalibrationId(Pageable pageable, Long id);
 
     @RestResource(exported = false)
     @Override
