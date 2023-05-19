@@ -1,0 +1,26 @@
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Devices</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.4.0/css/bootstrap.min.css"/>
+    <script src="/webjars/jquery/3.6.2/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Urządzenia kalibrowane</h1>
+    <table class="table">
+        <tr>
+            <th>Model</th>
+            <th>Akcje</th>
+        </tr>
+        <tr th:each="device : ${devices}">
+            <td><span th:text="${device.model}">Model</span></td>
+            <td>
+                <a th:href="@{/home/calibration-service/{id}(id=${device.procedureId})}" class="btn btn-primary">Kalibruj</a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

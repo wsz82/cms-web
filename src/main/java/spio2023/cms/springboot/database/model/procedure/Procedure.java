@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 
 @Entity

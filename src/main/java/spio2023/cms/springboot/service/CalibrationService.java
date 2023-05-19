@@ -55,7 +55,7 @@ public class CalibrationService {
             throw new IllegalArgumentException(
                     String.format("Instrument values should come from control point, but actual instrument input values size is '%s'",
                             instrumentValuesSize));
-        } else if (instrumentValuesSize != measurementSeries) {
+        } else if (!setting.isReferenceValuesFromControlPoint() && instrumentValuesSize != measurementSeries) {
             throw new IllegalArgumentException(
                     String.format("Required number of measurements is '%s', but actual instrument input values size is '%s'",
                             measurementSeries, instrumentValuesSize));

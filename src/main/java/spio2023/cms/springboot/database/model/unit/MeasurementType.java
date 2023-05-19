@@ -9,6 +9,7 @@ import lombok.Setter;
 import spio2023.cms.springboot.database.model.procedure.Step;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class MeasurementType {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @NotNull
-    private Set<Unit> units;
+    private List<Unit> units;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Step> steps;
@@ -45,7 +46,7 @@ public class MeasurementType {
         this.symbol = model.getSymbol();
         this.units = Arrays.stream(model.getUnits())
                 .map(Unit::new)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     public spio2023.cms.core.unit.MeasurementType toModel() {
