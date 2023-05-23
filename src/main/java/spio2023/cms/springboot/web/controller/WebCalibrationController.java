@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import spio2023.cms.springboot.database.model.procedure.Step;
 import spio2023.cms.springboot.web.dto.StepFill;
 import spio2023.cms.springboot.web.service.WebCalibrationService;
 
@@ -43,7 +42,7 @@ public class WebCalibrationController {
 
     @PostMapping("/home/calibration-service/{calibrationId}/{stepNumber}")
     public String fillStep(@ModelAttribute StepFill stepFill, @PathVariable Long calibrationId, @PathVariable int stepNumber) {
-        var stepFillResult = webCalibrationService.stepFilll(stepFill, calibrationId, stepNumber);
+        var stepFillResult = webCalibrationService.stepFill(stepFill, calibrationId, stepNumber);
         if (stepFillResult.isLastStep()) {
             return "redirect:/results/search/findAllByCalibrationId?id=" + calibrationId;
 //            return "redirect:/home/calibration-service/" + calibrationId + "/results"; //todo Results page

@@ -1,7 +1,6 @@
 package spio2023.cms.springboot.web.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import spio2023.cms.springboot.database.model.calibration.Calibration;
 import spio2023.cms.springboot.database.model.calibration.Input;
 import spio2023.cms.springboot.database.model.calibration.InputValue;
@@ -103,13 +102,13 @@ public class WebCalibrationService {
             var prefix = parameters.get(i).toModel().getPrefix().getSymbol();
             var value = parameters.get(i).getValue();
             var unitName = units.get(i).getName();
-            var fullParameter = prefix + value + unitName;
+            var fullParameter = value + prefix + unitName;
             fullUnits.add(fullParameter);
         }
         return String.join(", ", fullUnits);
     }
 
-    public FillStepResult stepFilll(StepFill stepFill, Long calibrationId, int stepNumber) {
+    public FillStepResult stepFill(StepFill stepFill, Long calibrationId, int stepNumber) {
         int stepIndex = stepNumber - 1;
         var calibration = calibrationRepository.findById(calibrationId).get();
         var procedure = calibration.getProcedure();
