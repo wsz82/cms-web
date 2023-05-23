@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import spio2023.cms.springboot.web.StepFill;
+import spio2023.cms.springboot.database.model.procedure.Step;
+import spio2023.cms.springboot.web.dto.StepFill;
 import spio2023.cms.springboot.web.service.WebCalibrationService;
 
 @Controller
@@ -25,7 +26,18 @@ public class WebCalibrationController {
 
     @GetMapping("/home/calibration-service/{calibrationId}/{stepNumber}")
     public String showStep(Model model, @PathVariable Long calibrationId, @PathVariable int stepNumber) {
-        webCalibrationService.showStep(model, calibrationId, stepNumber);
+        var stepDTO = webCalibrationService.showStep(calibrationId, stepNumber);
+        model.addAttribute("calibrationId", stepDTO.getCalibrationId());
+        model.addAttribute("procedureName", stepDTO.getProcedureName());
+        model.addAttribute("isLastStep", stepDTO.isLastStep());
+        model.addAttribute("isInputStep", stepDTO.isInputStep());
+        model.addAttribute("referenceValue", stepDTO.getReferenceValue());
+        model.addAttribute("stepFill", stepDTO.getStepFill());
+        model.addAttribute("referenceValuesFromControlPoint", stepDTO.isReferenceValuesFromControlPoint());
+        model.addAttribute("measurementName", stepDTO.getMeasurementName());
+        model.addAttribute("measurementSymbol", stepDTO.getMeasurementSymbol());
+        model.addAttribute("parameters", stepDTO.getParameters());
+        model.addAttribute("message", stepDTO.getMessage());
         return "calibration";
     }
 

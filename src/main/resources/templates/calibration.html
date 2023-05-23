@@ -8,18 +8,22 @@
 </head>
 <body>
 <div class="container">
-    <h1 th:text="${procedureName}">Procedura</h1>
-    <p><span th:text="${step.message}">Wiadomość kroku</span></p>
+<h1 th:text="${procedureName}">Procedura</h1>
+<form action="#" th:action="@{/home/calibration-service/{id}/{number}(id=${calibrationId}, number=${stepNumber})}" th:object="${stepFill}" method="post">
+    <p>
+        <input th:if="${isLastStep}" type="submit" value="Zakończ"/>
+        <input th:unless="${isLastStep}" type="submit" value="Dalej"/>
+    </p>
+    <p><span th:text="${message}">Wiadomość kroku</span></p>
     <div th:if="${isInputStep}">
         <p>
-            <span>Pomiar: </span><span th:text="${measurmentName}">nazwa</span>
-            <span>, symbol: </span><span th:text="${measurmentSymbol}">symbol</span>
+            <span>Pomiar: </span><span th:text="${measurementName}">nazwa</span>
+            <span>, symbol: </span><span th:text="${measurementSymbol}">symbol</span>
         </p>
         <p>
             <span>Parametry: </span><span th:text="${parameters}">parametry</span>
         </p>
     </div>
-    <form action="#" th:action="@{/home/calibration-service/{id}/{number}(id=${calibrationId}, number=${stepNumber})}" th:object="${stepFill}" method="post">
         <div th:if="${isInputStep}">
             <table class="table">
                 <thead>
@@ -43,11 +47,7 @@
                 </tbody>
             </table>
         </div>
-        <p>
-            <input th:if="${isLastStep}" type="submit" value="Zakończ"/>
-            <input th:unless="${isLastStep}" type="submit" value="Dalej"/>
-        </p>
-    </form>
+</form>
 </div>
 </body>
 </html>

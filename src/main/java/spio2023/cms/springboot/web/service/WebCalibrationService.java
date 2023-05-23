@@ -12,8 +12,9 @@ import spio2023.cms.springboot.database.repository.CalibrationRepository;
 import spio2023.cms.springboot.database.repository.InputRepository;
 import spio2023.cms.springboot.database.repository.ProcedureRepository;
 import spio2023.cms.springboot.service.CalibrationService;
-import spio2023.cms.springboot.web.StepFill;
-import spio2023.cms.springboot.web.StepFillRow;
+import spio2023.cms.springboot.web.dto.StepDTO;
+import spio2023.cms.springboot.web.dto.StepFill;
+import spio2023.cms.springboot.web.dto.StepFillRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,19 +43,20 @@ public class WebCalibrationService {
         return calibration.getId();
     }
 
-    public void showStep(Model model, Long calibrationId, int stepNumber) {
+    public StepDTO showStep(Long calibrationId, int stepNumber) {
+        var stepDTO = new StepDTO();
         var calibration = calibrationRepository.findById(calibrationId).get();
         var procedure = calibration.getProcedure();
         var stepIndex = stepNumber - 1;
         var steps = procedure.getSteps();
         var step = steps.get(stepIndex);
-        model.addAttribute("calibrationId", calibrationId);
-        model.addAttribute("step", step);
-        model.addAttribute("procedureName", procedure.getName());
-        model.addAttribute("isLastStep", stepIndex+1 == steps.size());
+        stepDTO.setCalibrationId(calibrationId);
+        stepDTO.setProcedureName(procedure.getName());
+        stepDTO.setLastStep(stepIndex+1 == steps.size());
+        stepDTO.setMessage(step.getMessage());
 
         var isInputStep = step.getType().equals(Step.StepType.INPUT);
-        model.addAttribute("isInputStep", isInputStep);
+        stepDTO.setInputStep(isInputStep);
         if (isInputStep) {
             var procedureSetting = procedure.getProcedureSetting();
             var referenceValuesFromControlPoint = procedureSetting.isReferenceValuesFromControlPoint();
@@ -62,18 +64,19 @@ public class WebCalibrationService {
             var controlPoint = step.getControlPoint();
             var stepFill = makeStepFill(referenceValuesFromControlPoint, measurementSeries);
             var referenceValue = controlPoint.getParameters().get(0).getValue();
-            model.addAttribute("referenceValue", referenceValue);
+            stepDTO.setReferenceValue(referenceValue);
 
-            model.addAttribute("stepFill", stepFill);
-            model.addAttribute("referenceValuesFromControlPoint", referenceValuesFromControlPoint);
+            stepDTO.setStepFill(stepFill);
+            stepDTO.setReferenceValuesFromControlPoint(referenceValuesFromControlPoint);
             var measurementType = step.getMeasurementType();
-            model.addAttribute("measurmentName", measurementType.getName());
-            model.addAttribute("measurmentSymbol", measurementType.getSymbol());
+            stepDTO.setMeasurementName(measurementType.getName());
+            stepDTO.setMeasurementSymbol(measurementType.getSymbol());
             var units = measurementType.getUnits();
             var parameters = controlPoint.getParameters();
             var displayParameters = makeDisplayParameters(units, parameters);
-            model.addAttribute("parameters", displayParameters);
+            stepDTO.setParameters(displayParameters);
         }
+        return stepDTO;
     }
 
     private StepFill makeStepFill(boolean referenceValuesFromControlPoint, int measurementSeries) {
