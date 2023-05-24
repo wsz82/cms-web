@@ -11,6 +11,7 @@ import spio2023.cms.springboot.database.repository.CalibrationRepository;
 import spio2023.cms.springboot.database.repository.InputRepository;
 import spio2023.cms.springboot.database.repository.ProcedureRepository;
 import spio2023.cms.springboot.service.CalibrationService;
+import spio2023.cms.springboot.web.dto.CalibrationFill;
 import spio2023.cms.springboot.web.dto.StepDTO;
 import spio2023.cms.springboot.web.dto.StepFill;
 import spio2023.cms.springboot.web.dto.StepFillRow;
@@ -34,10 +35,11 @@ public class WebCalibrationService {
         this.calibrationService = calibrationService;
     }
 
-    public Long initCalibration(Long procedureId) {
+    public Long initCalibration(Long procedureId, CalibrationFill calibrationFill) {
         var procedure = procedureRepository.findById(procedureId).get();
         var calibration = new Calibration();
         calibration.setProcedure(procedure);
+        calibration.setDeviceSerialNumber(calibrationFill.getDeviceSerialNumber());
         calibrationRepository.save(calibration);
         return calibration.getId();
     }

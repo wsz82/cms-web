@@ -27,6 +27,9 @@ public class Calibration {
     @NotNull
     private Procedure procedure;
 
+    @NotNull
+    private String deviceSerialNumber;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "calibration")
     private Set<Input> inputs;
 

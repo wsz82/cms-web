@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import spio2023.cms.springboot.web.dto.CalibrationFill;
 import spio2023.cms.springboot.web.dto.StepFill;
 import spio2023.cms.springboot.web.service.WebCalibrationService;
 
@@ -18,8 +19,15 @@ public class WebCalibrationController {
     }
 
     @GetMapping("/home/calibration-service/{procedureId}")
-    public String initCalibration(@PathVariable Long procedureId) {
-        var calibrationId = webCalibrationService.initCalibration(procedureId);
+    public String initCalibration(Model model, @PathVariable Long procedureId) {
+        model.addAttribute("procedureId", procedureId);
+        model.addAttribute("calibrationFill", new CalibrationFill());
+        return "calibration_init";
+    }
+
+    @PostMapping("/home/calibration-service/{procedureId}")
+    public String startCalibration(@ModelAttribute CalibrationFill calibrationFill, @PathVariable Long procedureId) {
+        var calibrationId = webCalibrationService.initCalibration(procedureId, calibrationFill);
         return "redirect:/home/calibration-service/" + calibrationId + "/1";
     }
 
