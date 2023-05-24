@@ -1,14 +1,10 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Devices</title>
-    <link rel="stylesheet" href="/webjars/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <script src="/webjars/jquery/3.6.2/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<head th:insert="~{fragments :: headers}">
+    <title id="pageTitle">Przyrządy pomiarowe kalibrowane</title>
 </head>
 <body>
 <div class="container">
-    <h1>Urządzenia kalibrowane</h1>
+    <h1>Przyrządy pomiarowe kalibrowane</h1>
     <table class="table">
         <tr>
             <th>Model</th>

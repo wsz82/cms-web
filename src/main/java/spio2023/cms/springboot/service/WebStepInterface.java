@@ -21,9 +21,7 @@ public class WebStepInterface implements StepInterface {
     }
 
     @Override
-    public void showMessage(String s) {
-        System.out.println(s);
-    }
+    public void showMessage(String s) {}
 
     @Override
     public Double[] getReferencedInput() {

@@ -2,25 +2,28 @@ package spio2023.cms.springboot.database.model.calibration;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import spio2023.cms.core.unit.Prefix;
 import spio2023.cms.springboot.database.model.procedure.Step;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 
 @Entity
 public class Result {
 
-    @EqualsAndHashCode.Exclude
     @Id
     @GeneratedValue
     private Long id;
+
+    @CreationTimestamp
+    private Timestamp timestamp;
 
     @Column(nullable = false)
     @NotNull

@@ -1,7 +1,6 @@
 package spio2023.cms.springboot.web.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import spio2023.cms.springboot.database.model.calibration.Calibration;
 import spio2023.cms.springboot.database.model.calibration.Input;
 import spio2023.cms.springboot.database.model.calibration.InputValue;
@@ -12,8 +11,10 @@ import spio2023.cms.springboot.database.repository.CalibrationRepository;
 import spio2023.cms.springboot.database.repository.InputRepository;
 import spio2023.cms.springboot.database.repository.ProcedureRepository;
 import spio2023.cms.springboot.service.CalibrationService;
-import spio2023.cms.springboot.web.StepFill;
-import spio2023.cms.springboot.web.StepFillRow;
+import spio2023.cms.springboot.web.dto.CalibrationFill;
+import spio2023.cms.springboot.web.dto.StepDTO;
+import spio2023.cms.springboot.web.dto.StepFill;
+import spio2023.cms.springboot.web.dto.StepFillRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,27 +35,29 @@ public class WebCalibrationService {
         this.calibrationService = calibrationService;
     }
 
-    public Long initCalibration(Long procedureId) {
+    public Long initCalibration(Long procedureId, CalibrationFill calibrationFill) {
         var procedure = procedureRepository.findById(procedureId).get();
         var calibration = new Calibration();
         calibration.setProcedure(procedure);
+        calibration.setDeviceSerialNumber(calibrationFill.getDeviceSerialNumber());
         calibrationRepository.save(calibration);
         return calibration.getId();
     }
 
-    public void showStep(Model model, Long calibrationId, int stepNumber) {
+    public StepDTO showStep(Long calibrationId, int stepNumber) {
+        var stepDTO = new StepDTO();
         var calibration = calibrationRepository.findById(calibrationId).get();
         var procedure = calibration.getProcedure();
         var stepIndex = stepNumber - 1;
         var steps = procedure.getSteps();
         var step = steps.get(stepIndex);
-        model.addAttribute("calibrationId", calibrationId);
-        model.addAttribute("step", step);
-        model.addAttribute("procedureName", procedure.getName());
-        model.addAttribute("isLastStep", stepIndex+1 == steps.size());
+        stepDTO.setCalibrationId(calibrationId);
+        stepDTO.setProcedureName(procedure.getName());
+        stepDTO.setLastStep(stepIndex+1 == steps.size());
+        stepDTO.setMessage(step.getMessage());
 
         var isInputStep = step.getType().equals(Step.StepType.INPUT);
-        model.addAttribute("isInputStep", isInputStep);
+        stepDTO.setInputStep(isInputStep);
         if (isInputStep) {
             var procedureSetting = procedure.getProcedureSetting();
             var referenceValuesFromControlPoint = procedureSetting.isReferenceValuesFromControlPoint();
@@ -62,18 +65,19 @@ public class WebCalibrationService {
             var controlPoint = step.getControlPoint();
             var stepFill = makeStepFill(referenceValuesFromControlPoint, measurementSeries);
             var referenceValue = controlPoint.getParameters().get(0).getValue();
-            model.addAttribute("referenceValue", referenceValue);
+            stepDTO.setReferenceValue(referenceValue);
 
-            model.addAttribute("stepFill", stepFill);
-            model.addAttribute("referenceValuesFromControlPoint", referenceValuesFromControlPoint);
+            stepDTO.setStepFill(stepFill);
+            stepDTO.setReferenceValuesFromControlPoint(referenceValuesFromControlPoint);
             var measurementType = step.getMeasurementType();
-            model.addAttribute("measurmentName", measurementType.getName());
-            model.addAttribute("measurmentSymbol", measurementType.getSymbol());
+            stepDTO.setMeasurementName(measurementType.getName());
+            stepDTO.setMeasurementSymbol(measurementType.getSymbol());
             var units = measurementType.getUnits();
             var parameters = controlPoint.getParameters();
             var displayParameters = makeDisplayParameters(units, parameters);
-            model.addAttribute("parameters", displayParameters);
+            stepDTO.setParameters(displayParameters);
         }
+        return stepDTO;
     }
 
     private StepFill makeStepFill(boolean referenceValuesFromControlPoint, int measurementSeries) {
@@ -100,13 +104,13 @@ public class WebCalibrationService {
             var prefix = parameters.get(i).toModel().getPrefix().getSymbol();
             var value = parameters.get(i).getValue();
             var unitName = units.get(i).getName();
-            var fullParameter = prefix + value + unitName;
+            var fullParameter = value + prefix + unitName;
             fullUnits.add(fullParameter);
         }
         return String.join(", ", fullUnits);
     }
 
-    public FillStepResult stepFilll(StepFill stepFill, Long calibrationId, int stepNumber) {
+    public FillStepResult stepFill(StepFill stepFill, Long calibrationId, int stepNumber) {
         int stepIndex = stepNumber - 1;
         var calibration = calibrationRepository.findById(calibrationId).get();
         var procedure = calibration.getProcedure();

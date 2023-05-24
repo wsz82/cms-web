@@ -35,6 +35,7 @@ public class RestApiTest {
     public void testStepCalibration() throws Exception {
         var calibration = new JSONObject()
                 .put("procedure", "/1")
+                .put("deviceSerialNumber", "123")
                 .toString();
         var requestPostCalibration = post("/calibrations")
                 .contentType(MediaType.APPLICATION_JSON)

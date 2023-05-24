@@ -1,4 +1,4 @@
-package spio2023.cms.springboot.web;
+package spio2023.cms.springboot.web.dto;
 
 import lombok.Data;
 
