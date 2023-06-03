@@ -8,8 +8,8 @@
 <h1 th:text="${procedureName}">Procedura</h1>
 <form action="#" th:action="@{/home/calibration-service/{id}/{number}(id=${calibrationId}, number=${stepNumber})}" th:object="${stepFill}" method="post">
     <p>
-        <input th:if="${isLastStep}" type="submit" value="Zakończ"/>
-        <input th:unless="${isLastStep}" type="submit" value="Dalej"/>
+        <input th:if="${isLastStep}" type="submit" class="btn btn-primary" value="Zakończ"/>
+        <input th:unless="${isLastStep}" type="submit" class="btn btn-primary" value="Dalej"/>
     </p>
     <p><span th:text="${message}">Wiadomość kroku</span></p>
     <div th:if="${isInputStep}">
@@ -38,7 +38,7 @@
                         <input type="number" th:step="${resolution}" class="form-control" th:field="*{stepFillRows[__${itemStat.index}__].instrumentValue}" />
                     </td>
                     <td>
-                        <input type="number" th:step="${resolution}" class="form-control"  th:field="*{stepFillRows[__${itemStat.index}__].deviceValue}" />
+                        <input type="number" th:step="${resolution}" class="form-control" th:field="*{stepFillRows[__${itemStat.index}__].deviceValue}" />
                     </td>
                 </tr>
                 </tbody>
