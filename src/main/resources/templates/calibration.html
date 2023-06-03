@@ -35,10 +35,10 @@
                         <input th:value="${referenceValue}" type="text" disabled/>
                     </td>
                     <td th:unless="${referenceValuesFromControlPoint}">
-                        <input type="text" th:field="*{stepFillRows[__${itemStat.index}__].instrumentValue}" />
+                        <input type="number" th:step="${resolution}" class="form-control" th:field="*{stepFillRows[__${itemStat.index}__].instrumentValue}" />
                     </td>
                     <td>
-                        <input type="text" th:field="*{stepFillRows[__${itemStat.index}__].deviceValue}" />
+                        <input type="number" th:step="${resolution}" class="form-control"  th:field="*{stepFillRows[__${itemStat.index}__].deviceValue}" />
                     </td>
                 </tr>
                 </tbody>

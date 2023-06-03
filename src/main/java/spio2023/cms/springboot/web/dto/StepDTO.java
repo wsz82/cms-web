@@ -15,4 +15,5 @@ public class StepDTO {
     private String measurementName;
     private String measurementSymbol;
     private String parameters;
+    private Double resolution;
 }
