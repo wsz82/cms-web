@@ -32,7 +32,7 @@
                 <tbody>
                 <tr th:each="stepfillRow, itemStat : *{stepFillRows}">
                     <td th:if="${referenceValuesFromControlPoint}">
-                        <input th:value="${referenceValue}" type="text" disabled/>
+                        <input th:value="${referenceValue}" type="number" class="form-control" disabled/>
                     </td>
                     <td th:unless="${referenceValuesFromControlPoint}">
                         <input type="number" th:step="${resolution}" class="form-control" th:field="*{stepFillRows[__${itemStat.index}__].instrumentValue}" />
