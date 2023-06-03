@@ -76,6 +76,12 @@ public class WebCalibrationService {
             var parameters = controlPoint.getParameters();
             var displayParameters = makeDisplayParameters(units, parameters);
             stepDTO.setParameters(displayParameters);
+            var device = procedure.getDevice();
+            var resolutionExponent = device.toModel()
+                    .getMatchingScope(measurementType.toModel(), controlPoint.toModel())
+                    .getResolutionExponent();
+            double resolution = Math.pow(10, resolutionExponent);
+            stepDTO.setResolution(resolution);
         }
         return stepDTO;
     }

@@ -45,6 +45,7 @@ public class WebCalibrationController {
         model.addAttribute("measurementSymbol", stepDTO.getMeasurementSymbol());
         model.addAttribute("parameters", stepDTO.getParameters());
         model.addAttribute("message", stepDTO.getMessage());
+        model.addAttribute("resolution", stepDTO.getResolution());
         return "calibration";
     }
 

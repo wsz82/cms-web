@@ -6,10 +6,10 @@
 <body>
 <div class="container">
 <form action="#" th:action="@{/home/calibration-service/{id}(id=${procedureId})}" th:object="${calibrationFill}" method="post">
-    <label for="deviceSerialNumber">Numer seryjny: </label>
-    <input id="deviceSerialNumber" type="text" th:field="${calibrationFill.deviceSerialNumber}" />
+    <label for="deviceSerialNumber" class="control-label">Numer seryjny: </label>
+    <input id="deviceSerialNumber" type="text" required class="form-control"  th:field="${calibrationFill.deviceSerialNumber}" />
     <p>
-        <input type="submit" value="Rozpocznij"/>
+        <input type="submit" class="btn btn-primary" value="Rozpocznij"/>
     </p>
 </form>
 </div>
