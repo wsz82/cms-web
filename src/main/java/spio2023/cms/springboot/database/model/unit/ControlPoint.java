@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import spio2023.cms.springboot.database.model.calibration.Result;
 import spio2023.cms.springboot.database.model.procedure.Step;
 
 import java.util.Arrays;
@@ -32,6 +33,9 @@ public class ControlPoint {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Step> steps;
+
+    @OneToOne
+    private Result result;
 
     public ControlPoint(spio2023.cms.core.unit.ControlPoint model) {
         this.parameters = Arrays.stream(model.getParameters())

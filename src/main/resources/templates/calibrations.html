@@ -1,0 +1,29 @@
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kalibracje</title>
+    <div th:insert="~{fragments :: headers}"></div>
+</head>
+<body>
+<div class="container">
+    <h1>Kalibracje</h1>
+    <table class="table">
+        <tr>
+            <th>Data</th>
+            <th>Procedura</th>
+            <th>Numer seryjny urządzenia testowanego</th>
+            <th>Akcje</th>
+        </tr>
+        <tr th:each="calibration: ${calibrations}">
+            <td><span th:text="${calibration.timestamp}">Data</span></td>
+            <td><span th:text="${calibration.procedureName}">Procedura</span></td>
+            <td><span th:text="${calibration.deviceSerialNumber}">Numer seryjny urządzenia testowanego</span></td>
+            <td>
+                <a th:href="@{/home/reports/{id}/download(id=${calibration.getId()})}" download="raport.pdf">
+                    <button type="button" class="btn btn-primary">Pobierz raport</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

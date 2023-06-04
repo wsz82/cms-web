@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import spio2023.cms.springboot.database.model.calibration.Result;
 import spio2023.cms.springboot.database.model.procedure.Step;
 
 import java.util.Arrays;
@@ -40,6 +41,9 @@ public class MeasurementType {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Step> steps;
+
+    @OneToOne
+    private Result result;
 
     public MeasurementType(spio2023.cms.core.unit.MeasurementType model) {
         this.name = model.getName();

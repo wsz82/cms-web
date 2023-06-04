@@ -4,9 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import spio2023.cms.springboot.database.projection.CalibrationElement;
 import spio2023.cms.springboot.web.dto.CalibrationFill;
 import spio2023.cms.springboot.web.dto.StepFill;
 import spio2023.cms.springboot.web.service.WebCalibrationService;
+
+import java.util.List;
 
 @Controller
 public class WebCalibrationController {
@@ -56,8 +59,8 @@ public class WebCalibrationController {
                            RedirectAttributes redirectAttributes) {
         var stepFillResult = webCalibrationService.stepFill(stepFill, calibrationId, stepNumber);
         if (stepFillResult.isLastStep()) {
-            return "redirect:/results/search/findAllByCalibrationId?id=" + calibrationId;
-//            return "redirect:/home/calibration-service/" + calibrationId + "/results"; //todo Results page
+//            return "redirect:/results/search/findAllByCalibrationId?id=" + calibrationId;
+            return "redirect:/home/calibrations";
         }
         redirectAttributes.addAttribute("hasPassed", stepFillResult.isPass());
         redirectAttributes.addAttribute("wasInputStep", stepFillResult.isWasInputStep());
@@ -65,4 +68,11 @@ public class WebCalibrationController {
         return "redirect:/home/calibration-service/" + calibrationId + "/" + nextStepNumber;
     }
 
+
+    @GetMapping("/home/calibrations")
+    public String calibrations(Model model) {
+        var calibrations = webCalibrationService.listedCalibrations();
+        model.addAttribute("calibrations", calibrations);
+        return "calibrations";
+    }
 }

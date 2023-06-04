@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import spio2023.cms.core.unit.Prefix;
 import spio2023.cms.springboot.database.model.procedure.Step;
+import spio2023.cms.springboot.database.model.unit.ControlPoint;
+import spio2023.cms.springboot.database.model.unit.MeasurementType;
 
 import java.sql.Timestamp;
 
@@ -80,6 +82,14 @@ public class Result {
     @OneToOne
     @NotNull
     private Input input;
+
+    @OneToOne
+    @NotNull
+    private ControlPoint controlPoint;
+
+    @OneToOne
+    @NotNull
+    private MeasurementType measurementType;
 
     public Result(spio2023.cms.core.procedure.result.Result model, Step step, Calibration calibration, Input input) {
         this.prefix = model.getPrefix();
