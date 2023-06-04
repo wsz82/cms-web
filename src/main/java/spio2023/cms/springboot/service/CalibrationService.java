@@ -17,7 +17,7 @@ public class CalibrationService {
         this.repository = repository;
     }
 
-    public void runStepCalibration(Input entityInput) {
+    public Result runStepCalibration(Input entityInput) {
         var input = entityInput.toModel();
         var calibration = entityInput.getCalibration();
         var procedure = calibration.getProcedure().toModel();
@@ -35,7 +35,7 @@ public class CalibrationService {
 
         var result = state.getResultsData().get(measurementType).get(controlPoint);
         var calibrationResult = new Result(result, entityStep, calibration, entityInput);
-        repository.save(calibrationResult);
+        return repository.save(calibrationResult);
     }
 
     public void validateInput(Input input) {
