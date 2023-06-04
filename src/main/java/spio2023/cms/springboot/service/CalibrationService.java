@@ -6,6 +6,8 @@ import spio2023.cms.core.procedure.Calibration;
 import spio2023.cms.springboot.database.model.calibration.Input;
 import spio2023.cms.springboot.database.model.calibration.Result;
 import spio2023.cms.springboot.database.model.procedure.Step;
+import spio2023.cms.springboot.database.model.unit.ControlPoint;
+import spio2023.cms.springboot.database.model.unit.MeasurementType;
 import spio2023.cms.springboot.database.repository.ResultRepository;
 
 @Service
@@ -27,14 +29,18 @@ public class CalibrationService {
 
         var state = new Calibration(setting, procedure.getReferenceInstrument(), procedure.getTestDevice(), procedure.getControlPoints());
         var entityStep = entityInput.getStep();
-        var controlPoint = entityStep.getControlPoint().toModel();
-        var measurementType = entityStep.getMeasurementType().toModel();
+        var entityControlPoint = entityStep.getControlPoint();
+        var controlPoint = entityControlPoint.toModel();
+        var entityMeasurementType = entityStep.getMeasurementType();
+        var measurementType = entityMeasurementType.toModel();
         var step = entityStep.toModel();
 
         calibrationEngine.runCalibration(step, state);
 
         var result = state.getResultsData().get(measurementType).get(controlPoint);
         var calibrationResult = new Result(result, entityStep, calibration, entityInput);
+        calibrationResult.setControlPoint(entityControlPoint);
+        calibrationResult.setMeasurementType(entityMeasurementType);
         return repository.save(calibrationResult);
     }
 

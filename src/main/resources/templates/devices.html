@@ -11,7 +11,7 @@
             <th>Model</th>
             <th>Akcje</th>
         </tr>
-        <tr th:each="device : ${devices}">
+        <tr th:each="device: ${devices}">
             <td><span th:text="${device.model}">Model</span></td>
             <td>
                 <a th:href="@{/home/calibration-service/{id}(id=${device.procedureId})}" class="btn btn-primary">Kalibruj</a>

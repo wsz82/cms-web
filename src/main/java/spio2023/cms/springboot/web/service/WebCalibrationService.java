@@ -7,6 +7,7 @@ import spio2023.cms.springboot.database.model.calibration.InputValue;
 import spio2023.cms.springboot.database.model.procedure.Step;
 import spio2023.cms.springboot.database.model.unit.Parameter;
 import spio2023.cms.springboot.database.model.unit.Unit;
+import spio2023.cms.springboot.database.projection.CalibrationElement;
 import spio2023.cms.springboot.database.repository.CalibrationRepository;
 import spio2023.cms.springboot.database.repository.InputRepository;
 import spio2023.cms.springboot.database.repository.ProcedureRepository;
@@ -157,4 +158,7 @@ public class WebCalibrationService {
         return new FillStepResult(isLastStep, pass, wasInputStep);
     }
 
+    public List<CalibrationElement> listedCalibrations() {
+        return calibrationRepository.findAllListedProjectedBy();
+    }
 }
