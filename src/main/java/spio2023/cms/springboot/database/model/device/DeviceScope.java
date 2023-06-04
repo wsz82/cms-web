@@ -32,22 +32,30 @@ public class DeviceScope {
 
     @Column(nullable = false)
     @NotNull
-    private double accuracy;
+    private double part;
 
     @Column(nullable = false)
     @NotNull
     private int resolutionExponent;
 
+    @Column(nullable = false)
+    @NotNull
+    private int digits;
+
+    private Double overrideAccuracy;
+
     public DeviceScope(TestScope model) {
         this.scopes = Arrays.stream(model.getScopes())
                 .map(Scope::new)
                 .collect(Collectors.toList());
-        this.accuracy = model.getAccuracy();
+        this.part = model.getPart();
         this.resolutionExponent = model.getResolutionExponent();
+        this.digits = model.getDigits();
+        this.overrideAccuracy = model.getOverrideAccuracy();
     }
 
     public TestScope toModel() {
-        return new TestScope(accuracy, resolutionExponent, scopes.stream()
+        return new TestScope(overrideAccuracy, part, resolutionExponent, digits, scopes.stream()
                 .map(Scope::toModel)
                 .toArray(spio2023.cms.core.scope.Scope[]::new)
         );
