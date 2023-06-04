@@ -122,8 +122,9 @@ public class WebCalibrationService {
         var procedure = calibration.getProcedure();
         var steps = procedure.getSteps();
         var step = steps.get(stepIndex);
-
-        if (step.getType().equals(Step.StepType.INPUT)) {
+        boolean pass = false;
+        boolean wasInputStep = step.getType().equals(Step.StepType.INPUT);
+        if (wasInputStep) {
             var input = new Input();
             input.setCalibration(calibration);
             input.setStep(step);
@@ -149,10 +150,11 @@ public class WebCalibrationService {
 
             calibrationService.validateInput(input);
             inputRepository.save(input);
-            calibrationService.runStepCalibration(input);
+            var result = calibrationService.runStepCalibration(input);
+            pass = result.isPass();
         }
         var isLastStep = stepIndex+1 == steps.size();
-        return new FillStepResult(isLastStep);
+        return new FillStepResult(isLastStep, pass, wasInputStep);
     }
 
 }

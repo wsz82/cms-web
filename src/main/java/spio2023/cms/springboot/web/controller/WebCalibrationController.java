@@ -2,10 +2,8 @@ package spio2023.cms.springboot.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spio2023.cms.springboot.web.dto.CalibrationFill;
 import spio2023.cms.springboot.web.dto.StepFill;
 import spio2023.cms.springboot.web.service.WebCalibrationService;
@@ -32,7 +30,9 @@ public class WebCalibrationController {
     }
 
     @GetMapping("/home/calibration-service/{calibrationId}/{stepNumber}")
-    public String showStep(Model model, @PathVariable Long calibrationId, @PathVariable int stepNumber) {
+    public String showStep(Model model, @PathVariable Long calibrationId, @PathVariable int stepNumber,
+                           @RequestParam(required = false) String hasPassed,
+                           @RequestParam(required = false) String wasInputStep) {
         var stepDTO = webCalibrationService.showStep(calibrationId, stepNumber);
         model.addAttribute("calibrationId", stepDTO.getCalibrationId());
         model.addAttribute("procedureName", stepDTO.getProcedureName());
@@ -46,16 +46,21 @@ public class WebCalibrationController {
         model.addAttribute("parameters", stepDTO.getParameters());
         model.addAttribute("message", stepDTO.getMessage());
         model.addAttribute("resolution", stepDTO.getResolution());
+        model.addAttribute("hasPassed", hasPassed);
+        model.addAttribute("wasInputStep", wasInputStep);
         return "calibration";
     }
 
     @PostMapping("/home/calibration-service/{calibrationId}/{stepNumber}")
-    public String fillStep(@ModelAttribute StepFill stepFill, @PathVariable Long calibrationId, @PathVariable int stepNumber) {
+    public String fillStep(@ModelAttribute StepFill stepFill, @PathVariable Long calibrationId, @PathVariable int stepNumber,
+                           RedirectAttributes redirectAttributes) {
         var stepFillResult = webCalibrationService.stepFill(stepFill, calibrationId, stepNumber);
         if (stepFillResult.isLastStep()) {
             return "redirect:/results/search/findAllByCalibrationId?id=" + calibrationId;
 //            return "redirect:/home/calibration-service/" + calibrationId + "/results"; //todo Results page
         }
+        redirectAttributes.addAttribute("hasPassed", stepFillResult.isPass());
+        redirectAttributes.addAttribute("wasInputStep", stepFillResult.isWasInputStep());
         var nextStepNumber = stepNumber + 1;
         return "redirect:/home/calibration-service/" + calibrationId + "/" + nextStepNumber;
     }

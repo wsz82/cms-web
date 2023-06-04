@@ -2,9 +2,32 @@
 <head>
     <title>Kalibracja</title>
     <div th:insert="~{fragments :: headers}"></div>
+    <script>
+        function displayMessage(duration) {
+            var messageElement = document.getElementById('passMessageElement');
+
+            setTimeout(function() {
+                messageElement.hidden = true;
+            }, duration);
+        }
+
+        window.onload = function() {
+            displayMessage(3000);
+        };
+    </script>
 </head>
 <body>
 <div class="container">
+    <div id="passMessageElement">
+        <div th:if="${wasInputStep}">
+            <div th:if="${hasPassed}" class="alert alert-success text-center">
+                <h1>Pass</h1>
+            </div>
+            <div th:unless="${hasPassed}" class="alert alert-danger text-center">
+                <h1>Fail</h1>
+            </div>
+        </div>
+    </div>
 <h1 th:text="${procedureName}">Procedura</h1>
 <form action="#" th:action="@{/home/calibration-service/{id}/{number}(id=${calibrationId}, number=${stepNumber})}" th:object="${stepFill}" method="post">
     <p>

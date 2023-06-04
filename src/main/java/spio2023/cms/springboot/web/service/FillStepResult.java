@@ -5,4 +5,6 @@ import lombok.Data;
 @Data
 public class FillStepResult {
     private final boolean isLastStep;
+    private final boolean pass;
+    private final boolean wasInputStep;
 }
