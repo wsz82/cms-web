@@ -12,6 +12,7 @@ import java.util.List;
 public interface ResultRepository extends JpaRepository<Result, Long> {
 
     Page<Result> findAllByCalibrationId(Pageable pageable, Long id);
+    @RestResource(exported = false)
     List<Result> findAllByCalibrationId(Long id);
 
     @RestResource(exported = false)
